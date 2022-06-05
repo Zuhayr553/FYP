@@ -196,22 +196,22 @@ class _Body11State extends State<Body11> {
             SizedBox(
               height: getProportionateScreenHeight(10),
             ),
-            Text(
-              "Value of X axis:${x.toStringAsFixed(2)}",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: getProportionateScreenWidth(16),
-              ),
-            ),
-            Text(
-              "Value of Y axis:${y.toStringAsFixed(2)}",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: getProportionateScreenWidth(16),
-              ),
-            ),
+            // Text(
+            //   "Value of X axis:${x.toStringAsFixed(2)}",
+            //   style: TextStyle(
+            //     color: Colors.black,
+            //     fontSize: getProportionateScreenWidth(16),
+            //   ),
+            // ),
             Text(
               "Value of Z axis:${z.toStringAsFixed(2)}",
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: getProportionateScreenWidth(16),
+              ),
+            ),
+            Text(
+              "IRI:${iri.toStringAsFixed(2)}",
               style: TextStyle(
                 color: Colors.black,
                 fontSize: getProportionateScreenWidth(16),
