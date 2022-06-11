@@ -47,6 +47,7 @@ dependencies:
   font_awesome_flutter: ^9.1.0
   calculus: ^0.8.0
   shared_preferences: ^2.0.15
+  label_marker: ^1.0.1
 
 dev_dependencies:
   flutter_test:

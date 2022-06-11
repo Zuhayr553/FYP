@@ -29,12 +29,13 @@ class _BodyState extends State<Body> {
     var querySnapshot = await collection.get();
     for (var queryDocumentSnapshot in querySnapshot.docs) {
       Map<String, dynamic> data = queryDocumentSnapshot.data();
-      print(data);
-      setState(() {
-        iri = data['IRI'];
-        Latitude = data['Latitude'];
-        Longitude = data['Longitude'];
-      });
+      if (mounted) {
+        setState(() {
+          iri = data['IRI'];
+          Latitude = data['Latitude'];
+          Longitude = data['Longitude'];
+        });
+      }
     }
   }
 
@@ -47,10 +48,12 @@ class _BodyState extends State<Body> {
 
   @override
   Widget build(BuildContext context) {
-    setState(() {
-      getdata();
-      Column();
-    });
+    if (mounted) {
+      setState(() {
+        getdata();
+        Column();
+      });
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
