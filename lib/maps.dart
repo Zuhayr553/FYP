@@ -39,38 +39,13 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     getdata();
-    //   markers.add(Marker(
-    //     //add start location marker
-    //     markerId: MarkerId(startLocation.toString()),
-    //     position: startLocation, //position of marker
-    //     infoWindow: InfoWindow(
-    //       //popup info
-    //       title: 'Starting Point',
-    //       snippet: 'Start Marker',
-    //     ),
-    //     icon: BitmapDescriptor.defaultMarkerWithHue(
-    //         BitmapDescriptor.hueBlue), //Icon for Marker
-    //   ));
 
-    //   markers.add(Marker(
-    //     //add distination location marker
-    //     markerId: MarkerId(endLocation.toString()),
-    //     position: endLocation, //position of marker
-    //     infoWindow: InfoWindow(
-    //       //popup info
-    //       title: 'Destination Point ',
-    //       snippet: 'Destination Marker',
-    //     ),
-    //     icon: BitmapDescriptor.defaultMarkerWithHue(
-    //         BitmapDescriptor.hueRed), //Icon for Marker
-    //   )
-    // );
     markers
         .addLabelMarker(LabelMarker(
       label: "Starting Point",
       markerId: MarkerId(startLocation.toString()),
       position: startLocation,
-      backgroundColor: Color.fromARGB(255, 0, 0, 0),
+      backgroundColor: Colors.deepPurpleAccent,
     ))
         .then(
       (value) {
@@ -82,20 +57,7 @@ class _HomeState extends State<Home> {
       label: "End Point",
       markerId: MarkerId(endLocation.toString()),
       position: endLocation,
-      backgroundColor: Color.fromARGB(255, 0, 0, 0),
-    ))
-        .then(
-      (value) {
-        setState(() {});
-      },
-    );
-
-    markers
-        .addLabelMarker(LabelMarker(
-      label: "End Point",
-      markerId: MarkerId(endLocation.toString()),
-      position: endLocation,
-      backgroundColor: Color.fromARGB(255, 0, 0, 0),
+      backgroundColor: Colors.deepPurpleAccent,
     ))
         .then(
       (value) {
@@ -106,23 +68,6 @@ class _HomeState extends State<Home> {
 
     super.initState();
   }
-
-  // setmarker() {
-  //   for (int i = 1; i <= Latitude.length; i++) {
-  //     markers
-  //         .addLabelMarker(LabelMarker(
-  //       label: "IRI:${iri} Lat:${Latitude} Long:${Longitude}",
-  //       markerId: MarkerId(endLocation.toString()),
-  //       position: LatLng(double.parse(Latitude[i]), double.parse(Longitude[i])),
-  //       backgroundColor: Color.fromARGB(255, 0, 0, 0),
-  //     ))
-  //         .then(
-  //       (value) {
-  //         setState(() {});
-  //       },
-  //     );
-  //   }
-  // }
 
   getdata() async {
     var collection = FirebaseFirestore.instance
@@ -142,7 +87,7 @@ class _HomeState extends State<Home> {
         markerId: MarkerId("Bad IRI"),
         position: LatLng(
             double.parse(data['Latitude']), double.parse(data['Longitude'])),
-        backgroundColor: Color.fromARGB(255, 0, 0, 0),
+        backgroundColor: Color.fromARGB(255, 6, 2, 252),
       ))
           .then(
         (value) {
@@ -152,21 +97,6 @@ class _HomeState extends State<Home> {
       // latlang.add(LatLng(data['Latitude'], data['Longitude']));
     }
     print(markers);
-    // print(Latitude);
-    // var list = [];
-    // for (int i = 0; i <= querySnapshot.docs.length; i++) {
-    //   if (mounted) {
-    //     setState(() {
-    //       data.forEach((key, value) {
-    //         list.add();
-    //         print(iri);
-    //       });
-    //     });
-    //   }
-    // }
-    // for (int i = 0; i <= Latitude.length; i++) {
-    //   latlang.add(LatLng(Latitude[i], Longitude[i]));
-    // }
   }
 
   getDirections() async {

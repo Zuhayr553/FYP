@@ -103,13 +103,14 @@ class _Body11State extends State<Body11> {
 
   storeinfirebase() {
     _firestore.collection('IRIGPS').add({
-      'IRI': iri,
+      'IRI': iri.toStringAsFixed(2),
       'Latitude': latitude,
       'Longitude': longitude,
     });
   }
 
   Timer? timer;
+  Timer? timer1;
 
 // @override
 // void initState() {
@@ -148,6 +149,7 @@ class _Body11State extends State<Body11> {
     getDistance();
     timer =
         Timer.periodic(Duration(seconds: 5), (Timer t) => storeinfirebase());
+    timer1 = Timer.periodic(Duration(seconds: 2), (Timer t) => getgpsvalues());
     // getLocation();
     //get the sensor data and set then to the data types
   }
@@ -158,7 +160,6 @@ class _Body11State extends State<Body11> {
         getaccelerometervalues();
         Column();
         // getLocation()
-        getgpsvalues();
         // getcurrentgpsvalues();
         getiri();
       });

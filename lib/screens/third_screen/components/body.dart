@@ -103,28 +103,28 @@ class _BodyState extends State<Body> {
             ),
           ),
         ),
-        Padding(
-          padding: EdgeInsets.all(16),
-          child: Card(
-            color: kPrimaryColor,
-            child: ListTile(
-              title: Text(
-                "GPS:",
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                    color: Colors.black),
-              ),
-              trailing: Text(
-                "Longitude: $Latitude Latitude: $Longitude",
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 17,
-                    color: Colors.black),
-              ),
-            ),
-          ),
-        ),
+        // Padding(
+        //   padding: EdgeInsets.all(16),
+        //   child: Card(
+        //     color: kPrimaryColor,
+        //     child: ListTile(
+        //       title: Text(
+        //         "GPS:",
+        //         style: TextStyle(
+        //             fontWeight: FontWeight.bold,
+        //             fontSize: 20,
+        //             color: Colors.black),
+        //       ),
+        //       trailing: Text(
+        //         "Longitude: $Latitude Latitude: $Longitude",
+        //         style: TextStyle(
+        //             fontWeight: FontWeight.bold,
+        //             fontSize: 17,
+        //             color: Colors.black),
+        //       ),
+        //     ),
+        //   ),
+        // ),
         Padding(
           padding: EdgeInsets.all(16),
           child: Card(
