@@ -22,7 +22,9 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   String? Latitude;
   String? Longitude;
-  double iri = 0;
+  String? iri;
+  // double iritostring = double.parse(iri);
+  String roadcond = '';
   // final _firestore = FirebaseFirestore.instance;
   getdata() async {
     var collection = FirebaseFirestore.instance.collection('IRIGPS');
@@ -39,8 +41,19 @@ class _BodyState extends State<Body> {
     }
   }
 
+  roadcondtion() {
+    if (double.parse(iri!) < 5) {
+      roadcond = 'Very Good';
+    } else if (double.parse(iri!) < 8 && double.parse(iri!) >= 5) {
+      roadcond = 'Good';
+    } else {
+      roadcond = 'Poor';
+    }
+  }
+
   // int iri = 0;
   void init() {
+    roadcondtion();
     getdata();
     Column();
     super.initState();
@@ -52,6 +65,7 @@ class _BodyState extends State<Body> {
       setState(() {
         getdata();
         Column();
+        roadcondtion();
       });
     }
     return Column(
@@ -94,7 +108,7 @@ class _BodyState extends State<Body> {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
               trailing: Text(
-                iri.toStringAsFixed(1),
+                iri.toString(),
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
@@ -135,7 +149,7 @@ class _BodyState extends State<Body> {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
               trailing: Text(
-                "Poor",
+                roadcond,
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
