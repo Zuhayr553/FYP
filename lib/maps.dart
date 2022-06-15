@@ -83,7 +83,7 @@ class _HomeState extends State<Home> {
       markers
           .addLabelMarker(LabelMarker(
         label:
-            "IRI:${data['IRI']} Lat:${data['Latitude']} Long:${data['Longitude']}",
+            "IRI:${data['IRI'].toStringAsFixed(2)} Lat:${data['Latitude']} Long:${data['Longitude']}",
         markerId: MarkerId("Bad IRI"),
         position: LatLng(
             double.parse(data['Latitude']), double.parse(data['Longitude'])),

@@ -87,6 +87,7 @@ class _Body11State extends State<Body11> {
         desiredAccuracy: LocationAccuracy.medium);
     // print(position);
     startgpsvaluelat = position1.latitude;
+    print(startgpsvaluelat);
     startgpsvaluelong = position1.longitude;
     // return [location, location11];
   }
@@ -130,26 +131,26 @@ class _Body11State extends State<Body11> {
 
   final _firestore = FirebaseFirestore.instance;
   double iri = 0;
-  double startgpsvaluelat = 1;
-  double startgpsvaluelong = 1;
-  double currentgpsvaluelat = 20;
-  double currentgpsvaluelong = 20;
+  double startgpsvaluelat = 0;
+  double startgpsvaluelong = 0;
+  double currentgpsvaluelat = 0;
+  double currentgpsvaluelong = 0;
 
   // Timer? timer;
 
   @override
   void initState() {
     // TODO: implement initState
-    super.initState();
     getaccelerometervalues();
     getgpsvalues();
-    // getstartgpsvalues();
-    // getcurrentgpsvalues();
-    getiri();
+    getstartgpsvalues();
+    getcurrentgpsvalues();
     getDistance();
+    getiri();
     timer =
         Timer.periodic(Duration(seconds: 5), (Timer t) => storeinfirebase());
     timer1 = Timer.periodic(Duration(seconds: 2), (Timer t) => getgpsvalues());
+    super.initState();
     // getLocation();
     //get the sensor data and set then to the data types
   }
