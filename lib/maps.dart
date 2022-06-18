@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -22,9 +24,9 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   GoogleMapController? mapController; //contrller for Google map
   PolylinePoints polylinePoints = PolylinePoints();
-  var Latitude = [];
-  var Longitude = [];
-  var iri = [];
+  List<double> Latitude = [];
+  List<double> Longitude = [];
+  List<double> iri = [];
   List<LatLng> latlang = [];
   Map<String, dynamic> data = Map();
 
@@ -33,8 +35,8 @@ class _HomeState extends State<Home> {
   Set<Marker> markers = Set(); //markers for google map
   Map<PolylineId, Polyline> polylines = {}; //polylines to show direction
 
-  LatLng startLocation = LatLng(34.020660, 71.495093);
-  LatLng endLocation = LatLng(34.034364, 71.480534);
+  LatLng startLocation = LatLng(34.003040, 71.485524);
+  LatLng endLocation = LatLng(33.996438, 71.461848);
 
   @override
   void initState() {
@@ -65,38 +67,39 @@ class _HomeState extends State<Home> {
       },
     );
     getDirections(); //fetch direction polylines from Google API
-
     super.initState();
   }
 
   getdata() async {
     var collection = FirebaseFirestore.instance
-        .collection('IRIGPS')
+        .collection("IRIGPS")
         .where("IRI", isGreaterThan: 8);
     var querySnapshot = await collection.get();
     for (var queryDocumentSnapshot in querySnapshot.docs) {
       data = queryDocumentSnapshot.data();
-      // print(data);
-      iri.add(data['IRI']);
-      Latitude.add(data['Latitude']);
-      Longitude.add(data['Longitude']);
+      print('$data data print');
+      // iri.add(double.parse(data['IRI']));
+      // print('$iri iri');
+      // Latitude.add(double.parse(data['Latitude']));
+      // print('$Latitude Latitude');
+      // Longitude.add(double.parse(data['Longitude']));
       markers
           .addLabelMarker(LabelMarker(
-        label:
-            "IRI:${data['IRI'].toStringAsFixed(2)} Lat:${data['Latitude']} Long:${data['Longitude']}",
-        markerId: MarkerId("Bad IRI"),
-        position: LatLng(
-            double.parse(data['Latitude']), double.parse(data['Longitude'])),
-        backgroundColor: Color.fromARGB(255, 6, 2, 252),
+        label: "IRI:${data['IRI'].toStringAsFixed(2)}}",
+        markerId: MarkerId("Marker ${queryDocumentSnapshot.reference}"),
+        position: LatLng(double.parse('${data['Latitude']}'),
+            double.parse('${data['Longitude']}')),
+        backgroundColor: Color.fromARGB(255, 69, 142, 238),
       ))
           .then(
         (value) {
-          setState(() {});
+          if (mounted) {
+            setState(() {});
+          }
         },
       );
       // latlang.add(LatLng(data['Latitude'], data['Longitude']));
     }
-    print(markers);
   }
 
   getDirections() async {
@@ -133,6 +136,9 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      getdata();
+    });
     return Scaffold(
       body: GoogleMap(
         //Map widget from google_maps_flutter package

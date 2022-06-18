@@ -22,29 +22,29 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   String? Latitude;
   String? Longitude;
-  String? iri;
+  double iri = 0.0;
   // double iritostring = double.parse(iri);
   String roadcond = '';
   // final _firestore = FirebaseFirestore.instance;
   getdata() async {
-    var collection = FirebaseFirestore.instance.collection('IRIGPS');
+    var collection = FirebaseFirestore.instance
+        .collection('IRIGPS')
+        .orderBy('createdOn', descending: false);
     var querySnapshot = await collection.get();
     for (var queryDocumentSnapshot in querySnapshot.docs) {
       Map<String, dynamic> data = queryDocumentSnapshot.data();
       if (mounted) {
         setState(() {
           iri = data['IRI'];
-          Latitude = data['Latitude'];
-          Longitude = data['Longitude'];
         });
       }
     }
   }
 
   roadcondtion() {
-    if (double.parse(iri!) < 5) {
+    if (iri < 5) {
       roadcond = 'Very Good';
-    } else if (double.parse(iri!) < 8 && double.parse(iri!) >= 5) {
+    } else if (iri < 8 && iri >= 5) {
       roadcond = 'Good';
     } else {
       roadcond = 'Poor';
@@ -53,8 +53,8 @@ class _BodyState extends State<Body> {
 
   // int iri = 0;
   void init() {
-    roadcondtion();
     getdata();
+    roadcondtion();
     Column();
     super.initState();
   }
@@ -108,7 +108,7 @@ class _BodyState extends State<Body> {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
               trailing: Text(
-                iri.toString(),
+                iri.toStringAsFixed(2),
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,

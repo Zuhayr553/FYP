@@ -2,7 +2,8 @@
 
 // import 'dart:html';
 
-import 'dart:ffi';
+// import 'dart:ffi';
+// import 'dart:html';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -34,8 +35,6 @@ class _Body11State extends State<Body11> {
     accelerometerEvents.listen((AccelerometerEvent event) {
       if (mounted) {
         setState(() {
-          x = event.x;
-          y = event.y;
           z = event.z;
         });
       }
@@ -48,20 +47,7 @@ class _Body11State extends State<Body11> {
     // double doublein = i * (1 + 0);
     double doubleintegration = Calculus.integral(0, 1, (p0) => integration, 1);
     iri = doubleintegration / getDistance();
-    print(iri.toStringAsFixed(2));
   }
-  // getDistance() {
-  //   var dLat = radians(pLat - _currentPosition.latitude);
-  //   var dLng = radians(pLng - _currentPosition.longitude);
-  //   var a = sin(dLat / 2) * sin(dLat / 2) +
-  //       cos(radians(_currentPosition.latitude)) *
-  //           cos(radians(pLat)) *
-  //           sin(dLng / 2) *
-  //           sin(dLng / 2);
-  //   var c = 2 * atan2(sqrt(a), sqrt(1 - a));
-  //   var d = earthRadius * c;
-  //   print(d); //d is the distance in meters
-  // }
 
 //Calculating the distance between two points with Geolocator plugin
   double getDistance() {
@@ -74,20 +60,20 @@ class _Body11State extends State<Body11> {
   getgpsvalues() async {
     LocationPermission permission = await Geolocator.requestPermission();
     Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.medium);
+        desiredAccuracy: LocationAccuracy.high);
+    //  Position position1 = await Geolocator.
     // print(position);
-    latitude = position.latitude.toStringAsFixed(2);
-    longitude = position.longitude.toStringAsFixed(2);
+    startgpsvaluelat = position.latitude;
+    startgpsvaluelong = position.longitude;
     // return [location, location11];
   }
 
   getstartgpsvalues() async {
     // LocationPermission permission = await Geolocator.requestPermission();
     Position position1 = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.medium);
+        desiredAccuracy: LocationAccuracy.high);
     // print(position);
     startgpsvaluelat = position1.latitude;
-    print(startgpsvaluelat);
     startgpsvaluelong = position1.longitude;
     // return [location, location11];
   }
@@ -95,7 +81,7 @@ class _Body11State extends State<Body11> {
   getcurrentgpsvalues() async {
     // LocationPermission permission = await Geolocator.requestPermission();
     Position position2 = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.medium);
+        desiredAccuracy: LocationAccuracy.high);
     // print(position);
     currentgpsvaluelat = position2.latitude;
     currentgpsvaluelong = position2.longitude;
@@ -103,53 +89,81 @@ class _Body11State extends State<Body11> {
   }
 
   storeinfirebase() {
-    _firestore.collection('IRIGPS').add({
-      'IRI': iri.toStringAsFixed(2),
-      'Latitude': latitude,
-      'Longitude': longitude,
-    });
+    if (iri.isNaN == false) {
+      _firestore.collection('IRIGPS').add({
+        'IRI': iri,
+        'Latitude': latitude,
+        'Longitude': longitude,
+        'createdOn': FieldValue.serverTimestamp(),
+      });
+    }
   }
 
   Timer? timer;
   Timer? timer1;
 
-// @override
-// void initState() {
-//   super.initState();
-//   timer = Timer.periodic(Duration(seconds: 15), (Timer t) => storeinfirebase());
-// }
-
   @override
   void dispose() {
     timer?.cancel();
+    timer1?.cancel();
     super.dispose();
   }
 
   double x = 0, y = 0, z = 0;
-  String latitude = '';
-  String longitude = '';
+  double? latitude;
+  double? longitude;
 
   final _firestore = FirebaseFirestore.instance;
   double iri = 0;
-  double startgpsvaluelat = 0;
-  double startgpsvaluelong = 0;
+  double startgpsvaluelat = 1;
+  double startgpsvaluelong = 1;
   double currentgpsvaluelat = 0;
   double currentgpsvaluelong = 0;
-
   // Timer? timer;
+  getpositionstream() async {
+    LocationPermission permission = await Geolocator.checkPermission();
+
+    if (permission == LocationPermission.denied) {
+      await Geolocator.requestPermission();
+
+      return;
+    } else if (permission == LocationPermission.deniedForever) {
+      await Geolocator.openLocationSettings();
+
+      return;
+    } else {
+      LocationSettings locationSettings = LocationSettings(
+        accuracy: LocationAccuracy.high, //accuracy of the location data
+        distanceFilter: 0, //minimum distance (measured in meters) a
+        //device must move horizontally before an update event is generated;
+      );
+      StreamSubscription<Position> positionStream =
+          Geolocator.getPositionStream(locationSettings: locationSettings)
+              .listen((Position position) {
+        latitude = position.latitude.toDouble();
+        longitude = position.longitude.toDouble();
+        print('$longitude $latitude latitude longitude');
+        currentgpsvaluelat = position.latitude.toDouble();
+        currentgpsvaluelong = position.longitude.toDouble();
+      });
+    }
+  }
 
   @override
   void initState() {
     // TODO: implement initState
+    getpositionstream();
     getaccelerometervalues();
     getgpsvalues();
-    getstartgpsvalues();
-    getcurrentgpsvalues();
-    getDistance();
+    // getstartgpsvalues();
+    // getcurrentgpsvalues();
     getiri();
+    getDistance();
+    // getLocationUpdates();
     timer =
         Timer.periodic(Duration(seconds: 5), (Timer t) => storeinfirebase());
-    timer1 = Timer.periodic(Duration(seconds: 2), (Timer t) => getgpsvalues());
+    timer1 =
+        Timer.periodic(Duration(seconds: 2), (Timer t) => getpositionstream());
     super.initState();
     // getLocation();
     //get the sensor data and set then to the data types
@@ -160,11 +174,15 @@ class _Body11State extends State<Body11> {
       setState(() {
         getaccelerometervalues();
         Column();
+        // getLocationUpdates();
         // getLocation()
+        getgpsvalues();
+        getpositionstream();
         // getcurrentgpsvalues();
         getiri();
       });
     }
+
     return SizedBox(
       width: double.infinity,
       child: Padding(
@@ -198,44 +216,30 @@ class _Body11State extends State<Body11> {
             SizedBox(
               height: getProportionateScreenHeight(10),
             ),
+            Text(
+              "IRI:${iri.toStringAsFixed(1)}",
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: getProportionateScreenWidth(16),
+              ),
+            ),
             // Text(
-            //   "Value of X axis:${x.toStringAsFixed(2)}",
+            //   "GPS Longitude:${latitude!.toStringAsFixed(2)}",
             //   style: TextStyle(
             //     color: Colors.black,
             //     fontSize: getProportionateScreenWidth(16),
             //   ),
             // ),
-            Text(
-              "Value of Z axis:${z.toStringAsFixed(2)}",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: getProportionateScreenWidth(16),
-              ),
-            ),
-            Text(
-              "IRI:${iri.toStringAsFixed(2)}",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: getProportionateScreenWidth(16),
-              ),
-            ),
-            Text(
-              "GPS Longitude:$longitude",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: getProportionateScreenWidth(16),
-              ),
-            ),
-            Text(
-              "GPS Latitude:$latitude",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: getProportionateScreenWidth(16),
-              ),
-            ),
-            SizedBox(
-              height: getProportionateScreenHeight(30),
-            ),
+            // Text(
+            //   "GPS Latitude:${longitude!.toStringAsFixed(2)}",
+            //   style: TextStyle(
+            //     color: Colors.black,
+            //     fontSize: getProportionateScreenWidth(16),
+            //   ),
+            // ),
+            // SizedBox(
+            //   height: getProportionateScreenHeight(30),
+            // ),
             DefaultButton(
               text: "Stop",
               press: () {
