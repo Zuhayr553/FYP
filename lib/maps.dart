@@ -30,7 +30,7 @@ class _HomeState extends State<Home> {
   List<LatLng> latlang = [];
   Map<String, dynamic> data = Map();
 
-  String googleAPiKey = "AIzaSyDhVYvymMmOI4B7z5SGnpTvmyNbBp_1QOo";
+  String googleAPiKey = "";
 
   Set<Marker> markers = Set(); //markers for google map
   Map<PolylineId, Polyline> polylines = {}; //polylines to show direction
