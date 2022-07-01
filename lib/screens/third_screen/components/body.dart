@@ -108,7 +108,7 @@ class _BodyState extends State<Body> {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
               trailing: Text(
-                iri.toStringAsFixed(2),
+                iri.toString(),
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
@@ -149,7 +149,7 @@ class _BodyState extends State<Body> {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
               trailing: Text(
-                roadcond,
+                'Good',
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,

@@ -46,7 +46,11 @@ class _Body11State extends State<Body11> {
     // double i = z * (getDistance() + 0);
     // double doublein = i * (1 + 0);
     double doubleintegration = Calculus.integral(0, 1, (p0) => integration, 1);
-    iri = doubleintegration / getDistance();
+    double iri1 = doubleintegration / getDistance();
+    if (iri1.isNaN) {
+    } else {
+      iri = iri1;
+    }
   }
 
 //Calculating the distance between two points with Geolocator plugin
@@ -240,6 +244,7 @@ class _Body11State extends State<Body11> {
             // SizedBox(
             //   height: getProportionateScreenHeight(30),
             // ),
+
             DefaultButton(
               text: "Stop",
               press: () {
