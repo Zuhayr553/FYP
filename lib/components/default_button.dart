@@ -16,19 +16,22 @@ class DefaultButton extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       height: getProportionateScreenHeight(56),
-      child: FlatButton(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
+      child: Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.rectangle,
+          borderRadius: BorderRadius.circular(20),
           color: kPrimaryColor,
-          child: Text(
-            text!,
-            style: TextStyle(
-              fontSize: getProportionateScreenWidth(18),
-              color: Colors.white,
+        ),
+        child: TextButton(
+            child: Text(
+              text!,
+              style: TextStyle(
+                fontSize: getProportionateScreenWidth(18),
+                color: Colors.white,
+              ),
             ),
-          ),
-          onPressed: press as void Function()?),
+            onPressed: press as void Function()?),
+      ),
     );
   }
 }
